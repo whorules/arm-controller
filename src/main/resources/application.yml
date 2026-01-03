@@ -1,0 +1,10 @@
+spring.application.name: arm-controller
+server:
+  port: 8089
+
+latency:
+  max: 1500
+  min: 700
+  stepSize: 100
+  minChangeWindowMins: 2
+  acceptableErrorRate: 4
