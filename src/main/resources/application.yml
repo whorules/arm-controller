@@ -5,6 +5,6 @@ server:
 latency:
   max: 1500
   min: 700
-  stepSize: 100
+  stepSize: 50
   minChangeWindowMins: 2
   acceptableErrorRate: 4

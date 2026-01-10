@@ -9,9 +9,13 @@ public class TimeoutConfigProperties {
 
   private Integer max = 1500;
   private Integer min = 700;
-  private Integer stepSize = 700;
-  private Integer minChangeWindowMins = 700;
-  private Integer acceptableErrorRate = 700;
+  private Integer stepSize = 50;
+  private Integer minIncreaseWindowMins = 1;
+  private Integer minDecreaseWindowMins = 3;
+  private Integer targetErrorRate = 4;
+  private Double deadbandPct = 0.75;
+  private Integer decreaseStablePeriods = 3;
+  private Double panicMultiplier = 2.0;
 
   public Integer getMax() {
     return max;
@@ -37,20 +41,52 @@ public class TimeoutConfigProperties {
     this.stepSize = stepSize;
   }
 
-  public Integer getMinChangeWindowMins() {
-    return minChangeWindowMins;
+  public Integer getTargetErrorRate() {
+    return targetErrorRate;
   }
 
-  public void setMinChangeWindowMins(Integer minChangeWindowMins) {
-    this.minChangeWindowMins = minChangeWindowMins;
+  public void setTargetErrorRate(Integer targetErrorRate) {
+    this.targetErrorRate = targetErrorRate;
   }
 
-  public Integer getAcceptableErrorRate() {
-    return acceptableErrorRate;
+  public Double getDeadbandPct() {
+    return deadbandPct;
   }
 
-  public void setAcceptableErrorRate(Integer acceptableErrorRate) {
-    this.acceptableErrorRate = acceptableErrorRate;
+  public void setDeadbandPct(Double deadbandPct) {
+    this.deadbandPct = deadbandPct;
+  }
+
+  public Integer getDecreaseStablePeriods() {
+    return decreaseStablePeriods;
+  }
+
+  public void setDecreaseStablePeriods(Integer decreaseStablePeriods) {
+    this.decreaseStablePeriods = decreaseStablePeriods;
+  }
+
+  public Integer getMinIncreaseWindowMins() {
+    return minIncreaseWindowMins;
+  }
+
+  public void setMinIncreaseWindowMins(Integer minIncreaseWindowMins) {
+    this.minIncreaseWindowMins = minIncreaseWindowMins;
+  }
+
+  public Integer getMinDecreaseWindowMins() {
+    return minDecreaseWindowMins;
+  }
+
+  public void setMinDecreaseWindowMins(Integer minDecreaseWindowMins) {
+    this.minDecreaseWindowMins = minDecreaseWindowMins;
+  }
+
+  public Double getPanicMultiplier() {
+    return panicMultiplier;
+  }
+
+  public void setPanicMultiplier(Double panicMultiplier) {
+    this.panicMultiplier = panicMultiplier;
   }
 
 }
