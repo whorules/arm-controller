@@ -17,14 +17,11 @@ public class RetryConfigProperties {
   private double targetErrorPct = 1.0;
   private double deadbandPct = 0.3;
   private double panicMultiplier = 3.0;
-  private double decreaseBelowPct = 0.2;
   private int decreaseStablePeriods = 10;
   private int minIncreaseWindowMins = 1;
   private int minDecreaseWindowMins = 10;
   private int firstBackoffMs = 50;
   private int maxBackoffMs = 250;
   private int factor = 2;
-
-  private boolean decreaseEnabled = false;
 
 }

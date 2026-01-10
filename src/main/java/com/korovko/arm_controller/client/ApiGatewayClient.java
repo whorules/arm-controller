@@ -1,6 +1,5 @@
 package com.korovko.arm_controller.client;
 
-import com.korovko.arm_controller.model.ChangeBulkheadRequest;
 import com.korovko.arm_controller.model.ChangeRetryRequest;
 import com.korovko.arm_controller.model.ChangeTimeoutRequest;
 import org.springframework.core.ParameterizedTypeReference;
@@ -25,24 +24,9 @@ public class ApiGatewayClient {
         .body(new ParameterizedTypeReference<>() {});
   }
 
-  public Map<String, ChangeBulkheadRequest> getBulkheadProps() {
-    return apiGatewayRestClient.get()
-        .uri("/internal/resilience/bulkhead")
-        .retrieve()
-        .body(new ParameterizedTypeReference<>() {});
-  }
-
   public void changeTimeout(final ChangeTimeoutRequest request) {
     apiGatewayRestClient.post()
         .uri("/dynamic-timeouts")
-        .body(request)
-        .retrieve()
-        .toBodilessEntity();
-  }
-
-  public void changeBulkhead(final String routeId, final ChangeBulkheadRequest request) {
-    apiGatewayRestClient.post()
-        .uri("/internal/resilience/bulkhead/{routeId}", routeId)
         .body(request)
         .retrieve()
         .toBodilessEntity();

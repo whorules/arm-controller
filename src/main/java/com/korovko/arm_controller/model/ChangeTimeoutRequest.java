@@ -7,9 +7,6 @@ public class ChangeTimeoutRequest {
   private String routeId;
   private Integer timeoutMillis;
 
-  public ChangeTimeoutRequest() {
-  }
-
   public ChangeTimeoutRequest(String routeId, Integer timeoutMillis) {
     this.routeId = routeId;
     this.timeoutMillis = timeoutMillis;

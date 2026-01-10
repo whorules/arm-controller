@@ -90,7 +90,6 @@ public class DynamicRetryConfigurationService {
     double upper = target + retryConfigProperties.getDeadbandPct();
     double panic = target * retryConfigProperties.getPanicMultiplier();
 
-    // Increase path (fast)
     if (errPct > upper) {
       stableGoodCount.put(routeId, 0);
 
@@ -103,7 +102,9 @@ public class DynamicRetryConfigurationService {
           : Math.min(2, retryConfigProperties.getMaxAttempts());
 
       int next = Math.min(cap, current + retryConfigProperties.getStepSize());
-      if (next != current) apply(routeId, next);
+      if (next != current) {
+        apply(routeId, next);
+      }
       return;
     }
 
