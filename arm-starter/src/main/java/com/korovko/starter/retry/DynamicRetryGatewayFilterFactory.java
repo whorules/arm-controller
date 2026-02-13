@@ -1,4 +1,4 @@
-package com.korovko.arm_controller.retry;
+package com.korovko.starter.retry;
 
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;

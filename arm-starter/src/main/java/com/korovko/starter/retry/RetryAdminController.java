@@ -1,4 +1,4 @@
-package com.korovko.arm_controller.retry;
+package com.korovko.starter.retry;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

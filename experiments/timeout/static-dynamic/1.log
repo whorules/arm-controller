@@ -1,0 +1,85 @@
+2026-01-24T22:06:35.524-05:00  INFO 10030 --- [arm-controller] [           main] c.k.a.ArmControllerApplication           : Starting ArmControllerApplication using Java 21.0.8 with PID 10030 (/Users/akorovko/IdeaProjects/arm-controller/build/classes/java/main started by akorovko in /Users/akorovko/IdeaProjects/arm-controller)
+2026-01-24T22:06:35.524-05:00  INFO 10030 --- [arm-controller] [           main] c.k.a.ArmControllerApplication           : No active profile set, falling back to 1 default profile: "default"
+2026-01-24T22:06:35.937-05:00  INFO 10030 --- [arm-controller] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8089 (http)
+2026-01-24T22:06:35.944-05:00  INFO 10030 --- [arm-controller] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-24T22:06:35.944-05:00  INFO 10030 --- [arm-controller] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2026-01-24T22:06:35.962-05:00  INFO 10030 --- [arm-controller] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-24T22:06:35.962-05:00  INFO 10030 --- [arm-controller] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 420 ms
+2026-01-24T22:06:36.188-05:00  INFO 10030 --- [arm-controller] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8089 (http) with context path '/'
+2026-01-24T22:06:36.193-05:00  INFO 10030 --- [arm-controller] [           main] c.k.a.ArmControllerApplication           : Started ArmControllerApplication in 0.85 seconds (process running for 1.193)
+2026-01-24T22:06:39.292-05:00  INFO 10030 --- [arm-controller] [onPool-worker-1] k.a.s.DynamicTimeoutConfigurationService : Initialized timeouts: {visits_route=1100, customers_route=1100, vets_route=1100}
+2026-01-24T22:06:41.248-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1100ms timeoutErr=32.78%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:06:41.285-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : INCREASE route=vets_route 1100ms -> 1150ms (timeoutErr=32.78%)
+2026-01-24T22:06:41.285-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1100ms timeoutErr=32.01%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:06:41.290-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : INCREASE route=visits_route 1100ms -> 1150ms (timeoutErr=32.01%)
+2026-01-24T22:06:41.290-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1100ms timeoutErr=32.85%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:06:41.293-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : INCREASE route=customers_route 1100ms -> 1150ms (timeoutErr=32.85%)
+2026-01-24T22:06:42.198-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:07:11.212-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1150ms timeoutErr=29.26%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:07:11.213-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1150ms timeoutErr=30.11%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:07:11.214-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1150ms timeoutErr=27.15%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:07:12.193-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:07:41.210-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1150ms timeoutErr=26.75%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:07:41.211-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1150ms timeoutErr=25.32%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:07:41.211-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1150ms timeoutErr=22.26%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:07:42.195-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:08:11.218-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1150ms timeoutErr=24.57%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:08:11.228-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : INCREASE route=customers_route 1150ms -> 1200ms (timeoutErr=24.57%)
+2026-01-24T22:08:11.228-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1150ms timeoutErr=24.45%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:08:11.231-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : INCREASE route=vets_route 1150ms -> 1200ms (timeoutErr=24.45%)
+2026-01-24T22:08:11.231-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1150ms timeoutErr=24.8%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:08:11.234-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : INCREASE route=visits_route 1150ms -> 1200ms (timeoutErr=24.8%)
+2026-01-24T22:08:12.197-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:08:41.207-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1200ms timeoutErr=22.21%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:08:41.208-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1200ms timeoutErr=20.91%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:08:41.208-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1200ms timeoutErr=21.49%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:08:42.194-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:09:11.208-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1200ms timeoutErr=20.18%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:09:11.209-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1200ms timeoutErr=15.63%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:09:11.209-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1200ms timeoutErr=16.03%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:09:12.192-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:09:41.211-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1200ms timeoutErr=14.75%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:09:41.225-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : INCREASE route=visits_route 1200ms -> 1250ms (timeoutErr=14.75%)
+2026-01-24T22:09:41.225-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1200ms timeoutErr=18.21%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:09:41.230-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : INCREASE route=customers_route 1200ms -> 1250ms (timeoutErr=18.21%)
+2026-01-24T22:09:41.230-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1200ms timeoutErr=17.57%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:09:41.233-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : INCREASE route=vets_route 1200ms -> 1250ms (timeoutErr=17.57%)
+2026-01-24T22:09:42.194-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:10:11.205-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1250ms timeoutErr=14.04%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:10:11.205-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1250ms timeoutErr=11.84%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:10:11.205-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1250ms timeoutErr=11.26%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:10:12.193-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:10:41.207-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1250ms timeoutErr=8.76%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:10:41.208-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1250ms timeoutErr=8.42%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:10:41.208-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1250ms timeoutErr=8.86%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:10:42.197-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:11:11.211-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1250ms timeoutErr=8.1%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:11:11.239-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : INCREASE route=customers_route 1250ms -> 1300ms (timeoutErr=8.1%)
+2026-01-24T22:11:11.240-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1250ms timeoutErr=8.36%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:11:11.242-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : INCREASE route=vets_route 1250ms -> 1300ms (timeoutErr=8.36%)
+2026-01-24T22:11:11.243-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1250ms timeoutErr=7.93%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:11:11.245-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : INCREASE route=visits_route 1250ms -> 1300ms (timeoutErr=7.93%)
+2026-01-24T22:11:12.195-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:11:41.202-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1300ms timeoutErr=4.42%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:11:41.203-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1300ms timeoutErr=3.24%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:11:41.203-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1300ms timeoutErr=3.43%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:11:42.196-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:12:11.232-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1300ms timeoutErr=0.8%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:12:11.234-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1300ms timeoutErr=0.26%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:12:11.234-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1300ms timeoutErr=0.33%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:12:12.195-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:12:41.220-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1300ms timeoutErr=0.44%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:12:41.221-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1300ms timeoutErr=0.47%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:12:41.221-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1300ms timeoutErr=0.16%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:12:42.195-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:13:11.213-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1300ms timeoutErr=0.45%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:13:11.214-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1300ms timeoutErr=0.46%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:13:11.214-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1300ms timeoutErr=0.24%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:13:12.193-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:13:41.221-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1300ms timeoutErr=0.46%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:13:41.222-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1300ms timeoutErr=0.47%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:13:41.223-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1300ms timeoutErr=0.47%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:13:42.195-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] c.k.a.s.DynamicRetryConfigurationService : Running a scheduled task to check retries
+2026-01-24T22:14:11.203-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=customers_route timeout=1300ms timeoutErr=0.53%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:14:11.208-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=vets_route timeout=1300ms timeoutErr=0.13%, band=[3.25..4.75], panic>=8.0
+2026-01-24T22:14:11.208-05:00  INFO 10030 --- [arm-controller] [   scheduling-1] k.a.s.DynamicTimeoutConfigurationService : route=visits_route timeout=1300ms timeoutErr=0.4%, band=[3.25..4.75], panic>=8.0

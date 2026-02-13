@@ -1,6 +1,6 @@
 import com.code_intelligence.jazzer.api.FuzzedDataProvider;
 import com.code_intelligence.jazzer.junit.FuzzTest;
-import com.korovko.arm_controller.timeout.DynamicTimeLimiterUpdater;
+import com.korovko.starter.timeout.DynamicTimeLimiterUpdater;
 import io.github.resilience4j.timelimiter.TimeLimiterRegistry;
 import org.apache.commons.lang3.StringUtils;
 

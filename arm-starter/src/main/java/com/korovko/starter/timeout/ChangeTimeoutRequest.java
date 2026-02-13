@@ -1,4 +1,4 @@
-package com.korovko.arm_controller.timeout;
+package com.korovko.starter.timeout;
 
 import java.util.Objects;
 

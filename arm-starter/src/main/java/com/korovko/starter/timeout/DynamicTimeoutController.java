@@ -1,4 +1,4 @@
-package com.korovko.arm_controller.timeout;
+package com.korovko.starter.timeout;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;

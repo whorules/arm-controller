@@ -1,4 +1,4 @@
-import com.korovko.arm_controller.timeout.DynamicTimeLimiterUpdater;
+import com.korovko.starter.timeout.DynamicTimeLimiterUpdater;
 import io.github.resilience4j.timelimiter.TimeLimiterRegistry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

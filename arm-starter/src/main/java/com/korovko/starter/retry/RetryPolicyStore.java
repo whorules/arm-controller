@@ -1,4 +1,4 @@
-package com.korovko.arm_controller.retry;
+package com.korovko.starter.retry;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpMethod;
