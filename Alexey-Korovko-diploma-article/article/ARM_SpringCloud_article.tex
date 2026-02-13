@@ -1,0 +1,204 @@
+% !TeX encoding = UTF-8
+% !TeX spellcheck = ru_RU
+\documentclass[ams,yap]{iitpinfo_utf8}
+\usepackage{cite}
+\usepackage{hyperref}
+\usepackage[english,russian]{babel}
+\usepackage{cmap}
+
+\begin{document}
+
+\VolumeNo{2026}
+\IssueNo{?}
+\YearOfIssue{2026}
+\setcounter{page}{1}
+\CopyrightYear{2026}
+
+\title{Экспериментальное исследование адаптивной настройки паттернов устойчивости \textit{timeout} и \textit{retry} в микросервисной архитектуре на базе Spring Cloud}
+
+\author{А.~С.~Коровко,
+        В.~А.~Пархоменко,
+        }
+
+\institute{Санкт-Петербургский политехнический университет Петра Великого, Санкт-Петербург, Россия}
+
+\received{}
+
+\titlerunning{АДАПТИВНАЯ НАСТРОЙКА \textit{TIMEOUT} И \textit{RETRY} В МИКРОСЕРВИСАХ}
+
+\authorrunning{КОРОВКО, ПАРХОМЕНКО}
+
+\CopyrightedAuthors{Коровко, Пархоменко}
+
+\Rubric{ПРОГРАММНАЯ ИНЖЕНЕРИЯ}
+
+\maketitle
+
+\begin{abstract}
+В работе исследуется влияние адаптивной настройки параметров паттернов устойчивости \textit{timeout} и \textit{retry} на качество обслуживания микросервисного приложения в условиях контролируемых деградаций. Рассматривается подход, в котором поверх статической конфигурации Resilience4j работает внешний контур Adaptive Resilience Manager (ARM), изменяющий параметры по телеметрии Prometheus на уровне API Gateway. Основное внимание уделено экспериментальному сравнению статической и адаптивной конфигураций на стенде Spring Petclinic Microservices в сценариях с инъекцией задержек и транзиентных ошибок. Показано, что адаптивная настройка снижает долю ошибок HTTP~504 и HTTP~502/503 в диапазоне применимости метода, но сопровождается ростом хвостовой задержки успешных ответов и дополнительной ресурсной стоимостью повторных попыток. Также выявлены границы подхода в стресс-сценариях высокой нагрузки и тяжелой деградации.
+\end{abstract}
+
+\textbf{КЛЮЧЕВЫЕ СЛОВА:} микросервисная архитектура, устойчивость, Spring Cloud, Resilience4j, adaptive control, timeout, retry.
+
+\section{ВВЕДЕНИЕ}
+
+Микросервисный подход обеспечивает независимое масштабирование и быстрые циклы поставки, но повышает чувствительность системы к частичным отказам и сетевым деградациям~\cite{link1,article7}. В инженерной практике устойчивость обычно обеспечивается паттернами \textit{timeout}, \textit{retry}, \textit{circuit breaker}, которые конфигурируются статически. Такой подход плохо переносит нестационарные условия нагрузки: параметры, достаточные для «легкой» фазы, становятся неэффективными при росте латентности или транзиентных ошибок. Цель работы --- экспериментально оценить, как адаптивная подстройка параметров \textit{timeout} и \textit{retry} влияет на наблюдаемые показатели качества обслуживания на уровне API Gateway по сравнению со статической конфигурацией Resilience4j.
+
+\section{ОБЗОР РАБОТ И РЕШЕНИЙ}
+
+В исследованиях микросервисной устойчивости показано, что выбор параметров паттернов напрямую влияет на компромисс между доступностью, задержкой и ресурсной стоимостью~\cite{article8,article10}. Для \textit{retry} подтвержден эффект снижения транзиентных ошибок при ограниченном числе повторов и контролируемой стратегии backoff; агрессивные повторы увеличивают нагрузку и ухудшают задержку~\cite{article10}. Для \textit{timeout} индустриальные рекомендации подчеркивают риск чрезмерного удержания ресурсов при завышенных значениях и риск ранних отказов при заниженных~\cite{link48,link49,link50}. Сравнение подходов в экосистеме Spring Cloud показывает, что библиотечные решения наподобие Resilience4j удобны для внедрения, но в базовом виде ориентированы на статическую конфигурацию параметров~\cite{link14}. 
+
+Экспериментальная гипотеза настоящей работы заключается в том, что внешний контур управления, использующий телеметрию и применяющий изменения конфигурации в рантайме, позволяет уменьшить долю целевых ошибок (HTTP~504 для \textit{timeout}, HTTP~502/503 для \textit{retry}) без перехода к сервисной сетке и без модификации бизнес-логики доменных сервисов.
+
+\section{АРХИТЕКТУРА ПОДХОДА}
+
+Архитектура включает пять компонентов: тестовое приложение Spring Petclinic Microservices, API Gateway, Prometheus, Grafana и внешний управляющий контур ARM~\cite{link20,link21,link22}. ARM периодически считывает агрегированные метрики по маршрутам, сравнивает их с целевыми диапазонами и изменяет параметры Resilience4j на стороне шлюза через административный API. Управление выполняется независимо по \texttt{routeId} и ограничивается эксплуатационными границами параметров (минимум/максимум, шаг изменения, интервалы стабилизации).
+
+\begin{figure*}[ht!]
+  \centering
+  \includegraphics[width=0.92\textwidth]{images/microservices-architecture-diagram}
+  \caption{Экспериментальный стенд на базе spring-petclinic-microservices (из ВКР, в оттенках серого)}
+  \label{fig:architecture}
+\end{figure*}
+
+\section{ТЕСТИРОВАНИЕ}
+
+Корректность контура управления подтверждена модульными тестами правил принятия решений, BDD-сценариями ключевых пользовательских случаев и генеративными проверками устойчивости к некорректным данным мониторинга: за 10 минут обработано более 4 млн случайно сгенерированных входов без сбоев. Покрытие критичных слоев (service/client) по JaCoCo превышает 95\%, что снижает риск регрессий в логике изменения \textit{timeout} и \textit{retry}.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.85\linewidth]{images/jacoco_coverage}
+  \caption{Отчет покрытия JaCoCo (из ВКР, в оттенках серого)}
+  \label{fig:jacoco}
+\end{figure}
+
+\section{МЕТОДИКА ЭКСПЕРИМЕНТОВ}
+
+Эксперименты выполнялись на стенде Spring Petclinic Microservices с формированием нагрузки в Apache JMeter и контролируемой инъекцией деградаций~\cite{link23,link24}. Рассмотрены три группы сценариев: A1--A3 (адаптация \textit{timeout}), B1--B3 (адаптация \textit{retry}), C1--C2 (совместное управление). В сравнительных сценариях сопоставлялись Resilience4j static и ARM adaptive при одинаковых входных условиях; в валидационных и стресс-сценариях анализировалась корректность реакции ARM и границы применимости подхода. Основные метрики: доли ответов 2xx, 502, 503, 504, p99 (2xx) на gateway, а также ресурсные показатели.
+
+\section{РЕЗУЛЬТАТЫ ЭКСПЕРИМЕНТОВ}
+
+\subsection{Сценарии A1--A3: адаптация \textit{timeout}}
+
+В A1 (стационарная latency-деградация 700--1300~мс) адаптивная настройка снизила $E_{504}$ с 33--35\% (static) до 0--1.1\% (adaptive), при этом p99(2xx) вырос с уровня около 1.1~с до 1.42~с. Результат подтверждает ожидаемый компромисс «меньше ранних отказов --- выше хвостовая задержка успешных ответов».
+
+\begin{figure*}[ht!]
+  \centering
+  \includegraphics[width=0.47\textwidth]{images/A2_static}
+  \hfill
+  \includegraphics[width=0.47\textwidth]{images/A2_arm}
+  \caption{Эксперимент A2: static (слева) и adaptive (справа), в оттенках серого}
+  \label{fig:A2}
+\end{figure*}
+
+В A2 (нестационарная латентность) показано, что фиксированный низкий \textit{timeout} дает приемлемую задержку в «легкой» фазе, но приводит к 80--85\% 504 в «тяжелой» фазе. Фиксированный высокий \textit{timeout} почти устраняет 504, но повышает p99 до 1.25--1.30~с. ARM в «тяжелой» фазе снижает 504 с пика 28--30\% до 0--1\%, адаптируя параметр по ситуации.
+
+В A3 (неоднородность по маршрутам) ARM независимо по \texttt{routeId} оставляет \textit{timeout} без роста на «легком» \texttt{customers\_route} и увеличивает его до верхней границы на \texttt{vets\_route}/\texttt{visits\_route}. При этом для тяжелых маршрутов сохраняется 55--60\% 504 из-за выхода фактической латентности за установленный предел $\tau_{\max}=1500$~мс.
+
+\subsection{Сценарии B1--B3: адаптация \textit{retry}}
+
+В B1 (транзиентные 502/503 около 10\%) адаптивный \textit{retry} снизил $E_{502/503}$ с 9--11\% до 0.3--0.8\% и повысил долю 2xx с 89--91\% до 99--100\%. Цена улучшения --- рост p99(2xx) с 5--10~мс до 50--70~мс из-за повторных попыток.
+
+\begin{figure*}[ht!]
+  \centering
+  \includegraphics[width=0.47\textwidth]{images/3-retry-arm-off}
+  \hfill
+  \includegraphics[width=0.47\textwidth]{images/3-retry-arm-on}
+  \caption{Эксперимент B1: static без повторов (слева) и adaptive retry (справа), в оттенках серого}
+  \label{fig:B1}
+\end{figure*}
+
+В B2 (низкая транзиентность 1\%) ARM не «разгоняет» \textit{maxAttempts} без устойчивого сигнала ухудшения: после переходного участка метрики стабилизируются вблизи цели. В B3 (нетранзиентные ошибки 404/500) показана граница применимости \textit{retry}: при отсутствии ухудшения $E_{502/503}$ контур корректно не увеличивает число попыток.
+
+\subsection{Сценарии C1--C2: совместное управление}
+
+В C1 (одновременные latency и fault деградации) ARM уменьшает оба типа целевых ошибок: $E_{504}$ снижается с 25--35\% до 0--1\%, $E_{502/503}$ --- с 8--12\% до 0--1\%, а доля 2xx растет до 99--100\%. При этом p99(2xx) стабилизируется около 1.42~с, отражая фактический хвост латентности зависимостей.
+
+В C2 (стресс: 800 RPS, concurrency 1000, высокая латентность и транзиентность на части маршрутов) выявлены ограничения метода: на проблемных маршрутах доминируют 504 и растет p99, несмотря на достижение верхних границ параметров. Это подтверждает необходимость эксплуатационных ограничений и защитных правил для режима насыщения.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{images/C2}
+  \caption{Эксперимент C2: стресс-сценарий и границы применимости (в оттенках серого)}
+  \label{fig:C2}
+\end{figure}
+
+\begin{table*}[ht!]
+\centering
+\caption{Сводка ключевых количественных результатов}
+\label{tab:summary_results}
+\begin{tabular}{|p{2.0cm}|p{5.2cm}|p{6.2cm}|p{3.6cm}|}
+\hline
+Сценарий & Условия & Эффект ARM (по сравнению со static, где применимо) & Компромисс / ограничение \\
+\hline
+A1 & latency 700--1300 мс &
+$E_{504}$: 33--35\% $\rightarrow$ 0--1.1\% &
+p99(2xx): 1.05--1.15~с $\rightarrow$ 1.38--1.46~с \\
+\hline
+A2 & нестационарная латентность &
+пик $E_{504}$ в «тяжелой» фазе: 28--30\% $\rightarrow$ 0--1\% после адаптации &
+запаздывание обратного снижения \textit{timeout} из-за стабилизации \\
+\hline
+A3 & неоднородные маршруты &
+независимая подстройка по \texttt{routeId} &
+при $\tau_{\max}=1500$ мс на тяжелых маршрутах остается 55--60\% 504 \\
+\hline
+B1 & транзиентные 502/503 $\approx$10\% &
+$E_{502/503}$: 9--11\% $\rightarrow$ 0.3--0.8\%; 2xx: 89--91\% $\rightarrow$ 99--100\% &
+p99(2xx): 5--10~мс $\rightarrow$ 50--70~мс \\
+\hline
+B2/B3 & низкая транзиентность / нетранзиентные ошибки &
+отсутствие необоснованного роста \textit{maxAttempts} &
+\textit{retry} эффективно только для целевых транзиентных кодов \\
+\hline
+C1 & совместная деградация latency+fault &
+$E_{504}$ и $E_{502/503}$ снижаются до 0--1\%; 2xx до 99--100\% &
+p99(2xx): 1.38--1.46~с \\
+\hline
+C2 & стресс: 800 RPS, conc. 1000 &
+корректная работа контура до верхних границ параметров &
+в насыщении доминируют 504, p99 растет \\
+\hline
+\end{tabular}
+\end{table*}
+
+\clearpage
+\section*{ЗАКЛЮЧЕНИЕ}
+
+Экспериментально подтверждено, что адаптивная настройка \textit{timeout} и \textit{retry} на уровне API Gateway может существенно уменьшать долю целевых ошибок по сравнению со статической конфигурацией Resilience4j в контролируемых сценариях деградаций. При этом улучшение качества обслуживания достигается не бесплатно: рост успешности сопровождается увеличением хвостовой задержки и дополнительной ресурсной стоимостью. В стресс-режимах показаны границы применимости подхода, что требует явных эксплуатационных ограничений, стабилизации и правил безопасной работы в насыщении.
+
+\begin{thebibliography}{99}
+
+\bibitem{link1} Microservices, Spring. \url{https://spring.io/microservices}
+
+\bibitem{article7} Podduturi S.M. Security and Performance Optimization in Microservices for Real-Time Data Systems, International Journal for Multidisciplinary Research, 2024.
+
+\bibitem{article8} Mendonca N.C., Aderaldo C.M., Camara J., Garlan D. Model-Based Analysis of Microservice Resiliency Patterns, 2020. \url{https://ieeexplore.ieee.org/document/9101301}
+
+\bibitem{article9} Gesvindr D., Davidek J., Buhnova B. Design of Scalable and Resilient Applications using Microservice Architecture in PaaS Cloud, 2019. \url{https://dl.acm.org/doi/10.5220/0007842906190630}
+
+\bibitem{article10} Aderaldo C.M., Mendonca N.C. How The Retry Pattern Impacts Application Performance: A Controlled Experiment, 2023. \url{https://dl.acm.org/doi/10.1145/3613372.3613409}
+
+\bibitem{link12} Qualitative and quantitative comparison of Spring Cloud and Kubernetes in migrating from a monolithic to a microservice architecture. \url{https://link.springer.com/article/10.1007/s11761-023-00364-w}
+
+\bibitem{link14} Resilience4j. \url{https://resilience4j.readme.io/docs/getting-started}
+
+\bibitem{link20} spring-petclinic-microservices. \url{https://github.com/spring-petclinic/spring-petclinic-microservices}
+
+\bibitem{link21} Prometheus. \url{https://prometheus.io/}
+
+\bibitem{link22} Grafana. \url{https://grafana.com/}
+
+\bibitem{link23} Chaos Monkey. \url{https://github.com/Netflix/chaosmonkey}
+
+\bibitem{link24} Apache JMeter. \url{https://jmeter.apache.org/}
+
+\bibitem{link48} Addressing Cascading Failures, Google SRE Book. \url{https://sre.google/sre-book/addressing-cascading-failures/}
+
+\bibitem{link49} Timeouts, retries, and backoff with jitter, AWS Builder's Library. \url{https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter}
+
+\bibitem{link50} AWS Well-Architected: Design interactions in distributed systems to withstand failures. \url{https://wa.aws.amazon.com/wellarchitected/2020-07-02T19-33-23/wat.question.REL_5.en.html}
+
+\end{thebibliography}
+
+\end{document}

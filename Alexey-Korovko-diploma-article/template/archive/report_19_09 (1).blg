@@ -1,0 +1,67 @@
+This is BibTeX, Version 0.99d (TeX Live 2023)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: report_19_09 (1).aux
+The style file: unsrt.bst
+Database file #1: my_biblio.bib
+Warning--entry type for "build" isn't style-file defined
+--line 7 of file my_biblio.bib
+Warning--entry type for "jenkinsjob" isn't style-file defined
+--line 21 of file my_biblio.bib
+Warning--entry type for "cicd" isn't style-file defined
+--line 83 of file my_biblio.bib
+Warning--entry type for "cianalyze" isn't style-file defined
+--line 111 of file my_biblio.bib
+Warning--entry type for "groovyvsjava" isn't style-file defined
+--line 291 of file my_biblio.bib
+Warning--entry type for "atchplugin" isn't style-file defined
+--line 475 of file my_biblio.bib
+Warning--entry type for "testing" isn't style-file defined
+--line 489 of file my_biblio.bib
+Warning--entry type for "bdd" isn't style-file defined
+--line 593 of file my_biblio.bib
+Warning--entry type for "deployplugin" isn't style-file defined
+--line 607 of file my_biblio.bib
+Warning--entry type for "frontplugin" isn't style-file defined
+--line 627 of file my_biblio.bib
+You've used 13 entries,
+            1791 wiz_defined-function locations,
+            498 strings with 5234 characters,
+and the built_in function-call counts, 1823 in all, are:
+= -- 147
+> -- 62
+< -- 0
++ -- 29
+- -- 16
+* -- 57
+:= -- 256
+add.period$ -- 37
+call.type$ -- 13
+change.case$ -- 13
+chr.to.int$ -- 0
+cite$ -- 13
+duplicate$ -- 75
+empty$ -- 241
+format.name$ -- 16
+if$ -- 432
+int.to.chr$ -- 0
+int.to.str$ -- 13
+missing$ -- 3
+newline$ -- 66
+num.names$ -- 5
+pop$ -- 85
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 40
+stack$ -- 0
+substring$ -- 48
+swap$ -- 13
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 6
+width$ -- 15
+write$ -- 121
+(There were 10 warnings)

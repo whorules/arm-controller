@@ -1,0 +1,215 @@
+\chapter{Программный код ui тестов на языке Python}\label{appendix-extra-examples}
+
+Код базовой страницы для упрощения взаимодействия с элементами в тестах.
+
+\begin{lstlisting}[language=Python]
+import pytest
+import locators
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+import random
+import string
+from selenium.webdriver.common.action_chains import ActionChains
+
+
+class Base:
+    driver = None
+
+    @pytest.fixture(scope='function', autouse=True)
+    def setup(self, driver):
+        self.driver = driver
+
+    def wait(self, timeout=None):
+        if timeout is None:
+            timeout = 15
+        return WebDriverWait(self.driver, timeout)
+
+    def find(self, locator, timeout=None):
+        return self.wait(timeout).until(EC.visibility_of_element_located(locator))
+
+    def click(self, locator, timeout=None):
+        self.find(locator, timeout)
+        self.wait(timeout).until(EC.element_to_be_clickable(locator)).click()
+
+    def input_text(self, locator, text, timeout=None):
+        self.find(locator, timeout)
+        element = self.wait(timeout).until(EC.element_to_be_clickable(locator))
+        element.clear()
+        element.send_keys(text)
+
+\end{lstlisting}
+
+Код конфигурационно файла, в котором прописаны основные настройки и фикстуры для взаимодействия с драйвером.
+
+\begin{lstlisting}[language=Python]
+import pytest
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
+
+
+def pytest_addoption(parser):
+    parser.addoption('--browser', default='chrome')
+    parser.addoption('--url', default='http://localhost:5000/jenkins/job/tets1/buildConfigurationStatistics/')
+
+
+@pytest.fixture()
+def config(request):
+    browser = request.config.getoption('--browser')
+    url = request.config.getoption('--url')
+    return {'browser': browser, 'url': url}
+
+
+@pytest.fixture()
+def driver(config):
+    browser = config['browser']
+    url = config['url']
+    if browser == 'chrome':
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    elif browser == 'firefox':
+        driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()))
+    else:
+        raise RuntimeError(f'Unsupported browser: "{browser}"')
+    driver.get(url)
+    driver.maximize_window()
+    yield driver
+    driver.quit()
+
+\end{lstlisting}
+
+Код локаторов.
+
+\begin{lstlisting}[language=Python]
+from selenium.webdriver.common.by import By
+
+HEADER_LINK_PLUGIN = (By.XPATH, "//li[@class='jenkins-breadcrumbs__list-item']//a[contains(@href,'buildConfiguration')]")
+SIDE_LINK_PLUGIN = (By.XPATH, "//span[@class='task-link-wrapper ']//a[contains(@href,'buildConfiguration')]")
+HEADER_PLUGIN = (By.CSS_SELECTOR, "#main-panel h1")
+SUCCESS_RATE_CHART = (By.CSS_SELECTOR, "#successRateChart")
+SUCCESS_RATE_SELECT = (By.XPATH, "//canvas[@id='successRateChart']/../../form//select")
+SUCCESS_RATE_SELECT_MONTH = (By.XPATH, "//canvas[@id='successRateChart']/../../form//select//option")
+
+SUCCESS_RATE_SELECT_DAY = (By.XPATH, "//canvas[@id='successRateChart']/../../form//select//option[text()='Day']")
+
+
+
+BUILD_DURATION_CHART = (By.CSS_SELECTOR, "#buildDurationChart")
+BUILD_DURATION_SELECT = (By.XPATH, "//canvas[@id='buildDurationChart']/../../form//select")
+BUILD_DURATION_SELECT_MONTH = (By.XPATH, "//canvas[@id='buildDurationChart']/../../form//select//option")
+BUILD_DURATION_CHECKBOX_AVERAGE = (By.XPATH, "(//canvas[@id='buildDurationChart']/../../form//input)[1]")
+BUILD_DURATION_CHECKBOX_FAILED = (By.XPATH, "(//canvas[@id='buildDurationChart']/../../form//input)[2]")
+
+BUILD_DURATION_SELECT_WEEK = (By.XPATH, "//canvas[@id='buildDurationChart']/../../form//select//option[text()='Week']")
+
+TIME_SPENT_QUEUE_CHART = (By.CSS_SELECTOR, "#timeSpentQueue")
+TIME_SPENT_QUEUE_SELECT = (By.XPATH, "//canvas[@id='timeSpentQueue']/../../form//select")
+TIME_SPENT_QUEUE_SELECT_MONTH = (By.XPATH, "//canvas[@id='timeSpentQueue']/../../form//select//option")
+TIME_SPENT_QUEUE_CHECKBOX_AVERAGE = (By.XPATH, "(//canvas[@id='timeSpentQueue']/../../form//input)[1]")
+
+TIME_SPENT_QUEUE_SELECT_YEAR = (By.XPATH, "//canvas[@id='timeSpentQueue']/../../form//select//option[text()='Year']")
+
+TEST_COUNT_CHART = (By.CSS_SELECTOR, "#testCount")
+TEST_COUNT_SELECT = (By.XPATH, "//canvas[@id='testCount']/../../form//select")
+TEST_COUNT_SELECT_MONTH = (By.XPATH, "//canvas[@id='testCount']/../../form//select//option")
+TEST_COUNT_CHECKBOX_FAILED = (By.XPATH, "(//canvas[@id='testCount']/../../form//input)[1]")
+
+TEST_COUNT_SELECT_QUARTER = (By.XPATH, "//canvas[@id='testCount']/../../form//select//option[text()='Quarter']")
+
+ARTIFACTS_SIZE_CHART = (By.CSS_SELECTOR, "#artifactsSize")
+ARTIFACTS_SIZE_SELECT = (By.XPATH, "//canvas[@id='artifactsSize']/../../form//select")
+ARTIFACTS_SIZE_SELECT_MONTH = (By.XPATH, "//canvas[@id='artifactsSize']/../../form//select//option")
+ARTIFACTS_SIZE_CHECKBOX_AVERAGE = (By.XPATH, "(//canvas[@id='artifactsSize']/../../form//input)[1]")
+ARTIFACTS_SIZE_CHECKBOX_FAILED = (By.XPATH, "(//canvas[@id='artifactsSize']/../../form//input)[2]")
+
+ARTIFACTS_SIZE_SELECT_ALL = (By.XPATH, "//canvas[@id='artifactsSize']/../../form//select//option[text()='All']")
+
+\end{lstlisting}
+
+Код UI-тест-кейсов.
+
+\begin{lstlisting}[language=Python]
+import time
+
+from base import Base
+import locators
+import pytest
+
+
+class TestCase(Base):
+    @pytest.mark.UI
+    def test_open_tab(self):
+        assert 'buildConfigurationStatistics' in self.driver.current_url
+        assert 'Statistics for job tets1' in self.find(locators.HEADER_PLUGIN).text
+        assert 'Build Configuration Statistics' in self.find(locators.HEADER_LINK_PLUGIN).text
+        assert 'Build Configuration Statistics' in self.find(locators.SIDE_LINK_PLUGIN).text
+
+    @pytest.mark.UI
+    def test_success_rate_chart(self):
+        self.find(locators.SUCCESS_RATE_CHART)
+        self.find(locators.SUCCESS_RATE_SELECT)
+        assert 'Month' in self.find(locators.SUCCESS_RATE_SELECT_MONTH).text
+
+    @pytest.mark.UI
+    def test_build_duration_chart(self):
+        self.find(locators.BUILD_DURATION_CHART)
+        self.find(locators.BUILD_DURATION_SELECT)
+        assert 'Month' in self.find(locators.BUILD_DURATION_SELECT_MONTH).text
+        assert not (self.find(locators.BUILD_DURATION_CHECKBOX_AVERAGE)).is_selected()
+        assert not (self.find(locators.BUILD_DURATION_CHECKBOX_FAILED)).is_selected()
+
+    @pytest.mark.UI
+    def test_time_spent_queue_chart(self):
+        self.find(locators.TIME_SPENT_QUEUE_CHART)
+        self.find(locators.TIME_SPENT_QUEUE_SELECT)
+        assert 'Month' in self.find(locators.TIME_SPENT_QUEUE_SELECT_MONTH).text
+        assert not (self.find(locators.TIME_SPENT_QUEUE_CHECKBOX_AVERAGE)).is_selected()
+
+    @pytest.mark.UI
+    def test_test_count_chart(self):
+        self.find(locators.TEST_COUNT_CHART)
+        self.find(locators.TEST_COUNT_SELECT)
+        assert 'Month' in self.find(locators.TEST_COUNT_SELECT_MONTH).text
+        assert not (self.find(locators.TEST_COUNT_CHECKBOX_FAILED)).is_selected()
+
+    @pytest.mark.UI
+    def test_artifacts_size_chart(self):
+        self.find(locators.ARTIFACTS_SIZE_CHART)
+        self.find(locators.ARTIFACTS_SIZE_SELECT)
+        assert 'Month' in self.find(locators.ARTIFACTS_SIZE_SELECT_MONTH).text
+        assert not (self.find(locators.ARTIFACTS_SIZE_CHECKBOX_AVERAGE)).is_selected()
+        assert not (self.find(locators.ARTIFACTS_SIZE_CHECKBOX_FAILED)).is_selected()
+
+    @pytest.mark.UI
+    def test_change_value_select_period(self):
+        self.find(locators.SUCCESS_RATE_SELECT_DAY).click()
+        #time.sleep(4)
+        self.find(locators.BUILD_DURATION_SELECT_WEEK).click()
+        self.find(locators.TIME_SPENT_QUEUE_SELECT_YEAR).click()
+        self.find(locators.TEST_COUNT_SELECT_QUARTER).click()
+        self.find(locators.ARTIFACTS_SIZE_SELECT_ALL).click()
+
+    @pytest.mark.UI
+    def test_change_value_checkbox(self):
+        self.find(locators.BUILD_DURATION_CHECKBOX_AVERAGE).click()
+        self.find(locators.BUILD_DURATION_CHECKBOX_FAILED).click()
+        assert (self.find(locators.BUILD_DURATION_CHECKBOX_AVERAGE)).is_selected()
+        assert (self.find(locators.BUILD_DURATION_CHECKBOX_FAILED)).is_selected()
+        #time.sleep(4)
+        self.find(locators.TIME_SPENT_QUEUE_CHECKBOX_AVERAGE).click()
+        assert (self.find(locators.TIME_SPENT_QUEUE_CHECKBOX_AVERAGE)).is_selected()
+
+        self.find(locators.TEST_COUNT_CHECKBOX_FAILED).click()
+        assert (self.find(locators.TEST_COUNT_CHECKBOX_FAILED)).is_selected()
+
+        self.find(locators.ARTIFACTS_SIZE_CHECKBOX_AVERAGE).click()
+        self.find(locators.ARTIFACTS_SIZE_CHECKBOX_FAILED).click()
+        assert (self.find(locators.ARTIFACTS_SIZE_CHECKBOX_AVERAGE)).is_selected()
+        assert (self.find(locators.ARTIFACTS_SIZE_CHECKBOX_FAILED)).is_selected()
+
+
+
+
+\end{lstlisting}
+
+

@@ -1,0 +1,20 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    api platform("org.springframework.boot:spring-boot-dependencies:3.5.7")
+    api platform("org.springframework.cloud:spring-cloud-dependencies:2025.0.1")
+
+    api "org.springframework.cloud:spring-cloud-starter-gateway"
+
+    compileOnly "org.projectlombok:lombok:1.18.36"
+    annotationProcessor "org.projectlombok:lombok:1.18.36"
+
+    testImplementation(platform("org.junit:junit-bom:5.11.4"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}

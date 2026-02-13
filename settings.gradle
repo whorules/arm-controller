@@ -1,1 +1,4 @@
-rootProject.name = 'arm-controller'
+rootProject.name = 'arm'
+
+include 'arm-controller'
+include 'arm-starter'

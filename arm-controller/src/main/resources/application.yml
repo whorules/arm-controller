@@ -1,0 +1,32 @@
+spring.application.name: arm-controller
+server:
+  port: 8089
+
+dynamic:
+  timeout:
+    max: 1500
+    min: 700
+    stepSize: 100
+    minIncreaseWindowMins: 1
+    minDecreaseWindowMins: 2
+    targetErrorRate: 4
+    deadbandPct: 0.75
+    decreaseStablePeriods: 1
+    panicMultiplier: 2
+  retry:
+    minAttempts: 1
+    maxAttempts: 3
+    stepSize: 1
+    targetErrorPct: 1.0
+    deadbandPct: 0.3
+    panicMultiplier: 3.0
+    decreaseStablePeriods: 10
+    minIncreaseWindowMins: 1
+    minDecreaseWindowMins: 10
+    firstBackoffMs: 50
+    maxBackoffMs: 250
+    factor: 2
+
+rest-client:
+  armUrl: http://127.0.0.1:9091
+  apiGatewayUrl: http://127.0.0.1:8080

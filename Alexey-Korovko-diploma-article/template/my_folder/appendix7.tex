@@ -1,0 +1,99 @@
+\chapter{Программный код для обработки результатов апробации}\label{appendix-extra-examples}
+
+Код формирования веток frontend-maven-plugin с разными версиями.
+
+\begin{lstlisting}[language=Python]
+from git import Repo
+import re
+repo = Repo('C:\\frontmavemplugversion\\frontend-maven-plugin')
+
+commits = list(repo.iter_commits('master'))
+commit_first = commits[0]
+
+i = 1
+for commit in commits[1:]:
+    diff_changes = repo.git.diff("--shortstat", commit_first, commit)
+    list_changes = re.findall(r'\d+', diff_changes)
+    if i == 5:
+        diff_changes = repo.git.diff(commit_first, commit)
+    if len(list_changes) < 2:
+        continue
+    if len(list_changes) > 2:
+        list_changes_count = int(list_changes[1]) + int(list_changes[2])
+    else:
+        list_changes_count = int(list_changes[1])
+
+    if list_changes_count > 500:
+        print(i)
+        print("500+: ", diff_changes, commit)
+        repo.git.reset(commit)
+        new_branch_name = 'reverse_branch' + str(i)
+        repo.git.branch(new_branch_name)
+
+        repo.git.checkout(new_branch_name)
+        repo.git.push('origin', new_branch_name)
+        commit_first = commit
+        i+=1
+        if i > 12:
+            break
+   
+\end{lstlisting}
+
+Код редактирования xml файлов с конфигурациями сборок.
+
+\begin{lstlisting}[language=Python]
+import xml.etree.ElementTree as ET
+from datetime import datetime
+import dateutil.relativedelta
+import re
+from random import randrange
+
+curr_dt = datetime.now()
+
+len_builds = 18
+
+path_to_builds = "C:\\buildConfigurationStatistics\\work\\jobs\\test-Build-frontend-maven-plugin\\builds\\"
+
+name_file_build = "build.xml"
+
+for i in range(0, len_builds):
+    root = ET.parse(f"{path_to_builds}{i + 1}\\{name_file_build}")
+
+    print("Current datetime: ", curr_dt)
+    timestamp = int(round(curr_dt.timestamp()))*1000
+
+    print("Integer timestamp of current datetime: ", timestamp)
+
+    new_date = curr_dt - dateutil.relativedelta.relativedelta(months=i)
+
+    print("new_date: ", new_date)
+    timestamp_new = int(round(new_date.timestamp()))*1000
+
+    print("timestamp_new: ", timestamp_new)
+
+    new_root = root.getroot()
+    print(root)
+    timestampText = new_root.find('timestamp').text
+    print(timestampText)
+    root.find('timestamp').text = str(timestamp_new)
+
+    startTimeText = new_root.find('startTime').text
+    print(startTimeText)
+    rand_milli = randrange(5, 25)
+    root.find('startTime').text = str(timestamp_new + rand_milli)
+    print(rand_milli)
+
+    root.write(f'{path_to_builds}{i + 1}\\{name_file_build}', encoding = "UTF-8", xml_declaration = True)
+
+    # rewrire version xml
+
+    with open(f"{path_to_builds}{i + 1}\\{name_file_build}", "r") as rfile:
+        s = rfile.read()
+        rplce = re.sub('version=\'1.0\'', "version=\'1.1\'", s)
+    with open(f"{path_to_builds}{i + 1}\\{name_file_build}", "w") as wfile:
+        wfile.write(rplce)
+
+   
+\end{lstlisting}
+
+
