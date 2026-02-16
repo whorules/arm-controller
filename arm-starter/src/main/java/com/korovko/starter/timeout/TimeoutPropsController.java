@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-public class TimeLimiterDebugController {
+public class TimeoutPropsController {
 
     private final TimeLimiterRegistry registry;
 
-    public TimeLimiterDebugController(TimeLimiterRegistry registry) {
+    public TimeoutPropsController(TimeLimiterRegistry registry) {
         this.registry = registry;
     }
 

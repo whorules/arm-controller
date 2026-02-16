@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 
 @Component
-public class DynamicTimeLimiterUpdater {
+public class DynamicTimeoutUpdater {
 
-    private static final Logger log = LoggerFactory.getLogger(DynamicTimeLimiterUpdater.class);
+    private static final Logger log = LoggerFactory.getLogger(DynamicTimeoutUpdater.class);
 
     private final TimeLimiterRegistry timeLimiterRegistry;
 
-    public DynamicTimeLimiterUpdater(TimeLimiterRegistry timeLimiterRegistry) {
+    public DynamicTimeoutUpdater(TimeLimiterRegistry timeLimiterRegistry) {
         this.timeLimiterRegistry = timeLimiterRegistry;
     }
 

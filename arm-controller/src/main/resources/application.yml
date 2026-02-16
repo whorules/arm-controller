@@ -7,12 +7,12 @@ dynamic:
     max: 1500
     min: 700
     stepSize: 100
-    minIncreaseWindowMins: 1
-    minDecreaseWindowMins: 2
     targetErrorRate: 4
     deadbandPct: 0.75
+    panicMultiplier: 2.0
+    minIncreaseWindowMins: 1
+    minDecreaseWindowMins: 2
     decreaseStablePeriods: 1
-    panicMultiplier: 2
   retry:
     minAttempts: 1
     maxAttempts: 3

@@ -1,4 +1,4 @@
-import com.korovko.starter.timeout.DynamicTimeLimiterUpdater;
+import com.korovko.starter.timeout.DynamicTimeoutUpdater;
 import io.github.resilience4j.timelimiter.TimeLimiterRegistry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,15 +9,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class DynamicTimeLimiterUpdaterLoadTest {
+public class DynamicTimeoutUpdaterLoadTest {
 
     private TimeLimiterRegistry timeLimiterRegistry;
-    private DynamicTimeLimiterUpdater updater;
+    private DynamicTimeoutUpdater updater;
 
     @BeforeEach
     void setUp() {
         timeLimiterRegistry = TimeLimiterRegistry.ofDefaults();
-        updater = new DynamicTimeLimiterUpdater(timeLimiterRegistry);
+        updater = new DynamicTimeoutUpdater(timeLimiterRegistry);
     }
 
     @Test

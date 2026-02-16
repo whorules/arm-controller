@@ -1,7 +1,10 @@
 package com.korovko.arm_controller.model;
 
+import lombok.Data;
+
 import java.util.Objects;
 
+@Data
 public class ChangeTimeoutRequest {
 
   private String routeId;

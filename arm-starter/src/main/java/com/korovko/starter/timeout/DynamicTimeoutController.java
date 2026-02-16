@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/dynamic-timeouts")
 public class DynamicTimeoutController {
 
-    private final DynamicTimeLimiterUpdater timeLimiterUpdater;
+    private final DynamicTimeoutUpdater timeLimiterUpdater;
 
-    public DynamicTimeoutController(DynamicTimeLimiterUpdater registry) {
+    public DynamicTimeoutController(DynamicTimeoutUpdater registry) {
         this.timeLimiterUpdater = registry;
     }
 
